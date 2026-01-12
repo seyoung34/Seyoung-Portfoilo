@@ -157,16 +157,19 @@ export default function SkillsGrid({ isMobile }: { isMobile: boolean }) {
     const inView = useInView(sectionRef, { threshold: isMobile ? 0.25 : 0.5 });
 
     if (isMobile) {
+        console.log(`inView : ${inView}`);
         return (
-            <section ref={sectionRef} className="min-h-screen w-full px-4 py-16">
-                <h2 className={`text-[clamp(34px,10vw,56px)] font-black text-text ${inView ? "animate-appear" : "opacity-0"}`}>
+            <section ref={sectionRef} className="min-h-screen w-full px-4 py-16 flex flex-col">
+                <h2 className={`text-6xl font-bold text-white  ${inView ? "animate-appear-left" : "opacity-0"}`}>
                     Skills
                 </h2>
 
-                <div className={`mt-8 grid grid-cols-2 gap-3 ${inView ? "animate-appear" : "opacity-0"}`}>
-                    {skills.map((s) => (
-                        <SkillCardMobile key={s.name} skill={s} />
-                    ))}
+                <div className="flex flex-1 items-center justify-center">
+                    <div className={`w-full mt-8 grid grid-cols-3 gap-3 ${inView ? "animate-appear" : "opacity-0"}`}>
+                        {skills.map((s) => (
+                            <SkillCardMobile key={s.name} skill={s} />
+                        ))}
+                    </div>
                 </div>
             </section>
         );
@@ -188,7 +191,7 @@ export default function SkillsGrid({ isMobile }: { isMobile: boolean }) {
 
 function SkillCardMobile({ skill }: { skill: Skill }) {
     return (
-        <article className="relative overflow-hidden rounded-[16px] border border-border bg-surface aspect-square">
+        <article className="relative overflow-hidden rounded-[16px] border border-border bg-surface aspect-square ">
             <img src={skill.src} alt={skill.name} className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute left-3 bottom-3 rounded-full border border-border bg-bg/70 px-3 py-1 text-[11px] font-semibold text-muted">
                 {skill.name}

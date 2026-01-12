@@ -55,6 +55,10 @@ const skills: Skill[] = [
     },
 ];
 
+type Props = {
+    skill: Skill;
+    className?: string;
+};
 
 export default function SkillsGrid() {
 
@@ -63,10 +67,10 @@ export default function SkillsGrid() {
 
 
     return (
-        <section ref={sectionRef} className="min-h-screen w-full flex items-center justify-center ">
+        <section ref={sectionRef} className="min-h-screen w-full flex items-center justify-center flex-col sm:flex-row">
             <div className={`text-white text-7xl w-1/3 h-full flex items-center justify-center ${inView ? "animate-appear-left" : "opacity-0"}`}>Skills</div>
             <div className={`w-2/3 h-full flex items-center justify-center ${inView ? "animate-appear-right" : "opacity-0"}`}>
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3 ">
+                <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 lg:grid-cols-3 w-[90%] p-10">
                     {skills.map((s) => (
                         <SkillCard key={s.name} skill={s} />
                     ))}
@@ -76,26 +80,18 @@ export default function SkillsGrid() {
     );
 }
 
-
-
-
-type Props = {
-    skill: Skill;
-    className?: string;
-};
-
 function SkillCard({ skill, className }: Props) {
     return (
         <article
             className={[
                 "group relative overflow-hidden rounded-[18px] border",
-                "bg-[var(--color-surface)] border-[var(--color-border)]",
-                "shadow-[0_10px_22px_rgba(0,0,0,0.22)]",
+                "bg-surface border-border",
+
                 "transition-[transform,box-shadow,border-color] duration-200 ease-out",
-                "hover:-translate-y-[3px] hover:shadow-[0_16px_34px_rgba(0,0,0,0.35)]",
+                "hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(0,0,0,0.35)]",
                 "hover:border-[rgba(46,137,228,0.35)]",
 
-                "w-[140px] sm:w-[160px] lg:w-[180px] aspect-square",
+                "w-3/4 aspect-square",
 
                 className ?? "",
             ].join(" ")}
@@ -117,30 +113,30 @@ function SkillCard({ skill, className }: Props) {
             <div
                 className={[
                     "absolute inset-y-0 right-0 z-10",
-                    "w-[72%] max-w-[240px]", // 라벨 너비 (원하는 느낌에 맞춰 조절)
+                    "w-[70%]",
                     "translate-x-full group-hover:translate-x-0",
                     "transition-transform duration-300 ease-out",
-                    // 라벨 배경/테두리
-                    "border-l border-[var(--color-border)]",
-                    "bg-[rgba(17,26,46,0.92)]", // surface 느낌 + 약간 투명
+
+                    "border-l border-border",
+                    "bg-surface/90",
                     "backdrop-blur-[6px]",
-                    // 내부 정렬
+
                     "flex items-center",
                 ].join(" ")}
             >
                 <div className="px-4">
-                    <p className="text-[var(--color-text)] font-extrabold tracking-[-0.01em] text-[16px]">
+                    <p className="text-white font-extrabold tracking-[-0.01em] text-[16px]">
                         {skill.name}
                     </p>
 
                     {skill.note && (
-                        <p className="mt-1 text-[var(--color-muted)] text-[12px] font-semibold">
+                        <p className="mt-1 text-muted text-[12px] font-semibold">
                             {skill.note}
                         </p>
                     )}
 
-                    {/* 얇은 액센트 라인(선택) */}
-                    <div className="mt-3 h-px w-10 bg-[var(--color-accent)] opacity-70" />
+
+                    <div className="mt-3 h-px w-10 bg-accent opacity-70" />
                 </div>
             </div>
 

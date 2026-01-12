@@ -1,10 +1,29 @@
 import { useRef } from "react";
-import { useInView } from "../useInView";
+import { useInView } from "../hooks/useInView";
 
-export default function Intro() {
+export default function Intro({ isMobile }: { isMobile: boolean }) {
 
     const sectionRef = useRef<HTMLElement>(null);
     const inView = useInView(sectionRef, { threshold: 0.8 });
+
+    if (isMobile) {
+
+        return (
+            <section ref={sectionRef} className="min-h-screen w-full flex flex-col items-center justify-center">
+                <div className={`relative h-0.5 w-full bg-accent ${inView ? "animate-sweep" : "opacity-0"}`} />
+
+                <div className={`w-3/4 min-h-[20vh] text-white p-2 ${inView ? "animate-appear" : "opacity-0 translate-y-10"}`}>
+                    <div className="text-7xl font-bold">
+                        <div>Lee</div>
+                        <div>Se</div>
+                        <div>Young</div>
+                    </div>
+                    <div className="m-3 font-medium">junior frontend developer</div>
+                    <ProfileButton />
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section ref={sectionRef} className="min-h-screen w-full flex flex-col items-center justify-center">

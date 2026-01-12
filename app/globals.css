@@ -28,6 +28,17 @@
   /* Border */
   --color-border: rgba(245, 247, 255, 0.10);
 
+  @keyframes appearRight {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   @keyframes appear {
     from {
       opacity: 0;
@@ -38,6 +49,19 @@
       transform: translateY(0);
     }
   }
+
+  @keyframes appearLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  
 
   @keyframes sweep {
     0% {
@@ -59,7 +83,9 @@
   
 
   --animate-sweep: sweep 1.2s ease forwards;
-  --animate-appear: appear 3000ms ease forwards;
+  --animate-appear: appear 1000ms ease forwards;
+  --animate-appear-left: appearLeft 1000ms ease forwards;
+  --animate-appear-right: appearRight 1000ms ease forwards;
   --animate-appear-delay: appear 500ms ease-out forwards 150ms;
 }
 

@@ -24,51 +24,45 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+
     {
-        title: "인터랙티브 포트폴리오 웹사이트",
-        type: "personal",
-        period: "2025.03 ~ 진행중",
-        summary: "PC 스냅 스크롤과 모바일 자연 스크롤을 분기한 포트폴리오",
+        title: "뜨거운 감자",
+        type: "team",
+        period: "2024.09 ~ 2024.12",
+        summary: "나의 봉사활동 신청, 관리 앱",
 
         role: [
-            "전체 UI/UX 기획 및 디자인",
-            "React + TypeScript 기반 구조 설계",
-            "스크롤 스냅 로직 구현(임계값, 쿨다운)",
-            "모바일/데스크톱 UX 분기 처리",
+            "MyPage 담당 개발",
+            "REST API를 이용한 나의 정보 표시",
+            "앱 전체 UI 개발",
         ],
 
         techStack: [
-            "React",
-            "TypeScript",
-            "Vite",
-            "styled-components",
-            "IntersectionObserver",
+            "Kotlin",
+            "Android",
+            "REST API",
         ],
 
         troubles: [
+            //todo 
             {
-                problem: "모바일 환경에서 스크롤 스냅 UX가 오히려 불편함",
-                solution: "pointer: coarse 및 viewport 기준으로 스냅 로직 비활성화",
-                result: "모바일 사용자의 자연스러운 콘텐츠 소비 흐름 확보",
-            },
-            {
-                problem: "아코디언 높이를 render 중 ref로 측정하면서 ESLint 에러 발생",
-                solution: "useLayoutEffect에서 DOM 높이를 측정하고 state로 관리",
-                result: "React 규칙을 지키면서 부드러운 height 애니메이션 구현",
+                problem: "CSV 데이터 구조가 제각각이라 UI 렌더링이 깨짐",
+                solution: "정규화 스키마를 정의하고 파싱 단계에서 통합",
+                result: "데이터 품질과 UI 안정성 동시에 확보",
             },
         ],
 
         links: {
-            github: "https://github.com/yourname/portfolio",
-            demo: "https://yourname.vercel.app",
+            github: "https://github.com/seyoung34/HotGamja",
+            demo: ""
         },
     },
 
     {
-        title: "배드민턴 대회 운영 시스템 (COKCOK)",
-        type: "team",
-        period: "2024.09 ~ 2025.02",
-        summary: "리그전 및 토너먼트 운영을 위한 실시간 대회 관리 서비스",
+        title: "COKCOK",
+        type: "personal",
+        period: "2025.03 ~ 2025.05",
+        summary: "실시간 배드민턴 대회 운영 및 관리",
 
         role: [
             "프론트엔드 핵심 기능 개발",
@@ -94,63 +88,32 @@ export const projects: Project[] = [
         ],
 
         links: {
-            github: "https://github.com/yourname/cokcok",
+            github: "https://github.com/seyoung34/cokcok",
+            demo: "https://cokcok-27bab.web.app/"
         },
     },
 
     {
-        title: "뜨거운 감자 | 봉사활동 확인 신청 앱",
-        type: "team",
-        period: "2024.12",
-        summary: "CSV 기반 데이터를 시각적으로 비교하는 웹 애플리케이션",
-
-        role: [
-            "CSV 데이터 파싱 및 정규화",
-            "비교 UI 및 필터링 기능 구현",
-            "GitHub Pages 배포 환경 구성",
-        ],
-
-        techStack: [
-            "React",
-            "JavaScript",
-            "CSV Parser",
-            "GitHub Pages",
-        ],
-
-        troubles: [
-            {
-                problem: "CSV 데이터 구조가 제각각이라 UI 렌더링이 깨짐",
-                solution: "정규화 스키마를 정의하고 파싱 단계에서 통합",
-                result: "데이터 품질과 UI 안정성 동시에 확보",
-            },
-        ],
-
-        links: {
-            github: "https://github.com/yourname/tech-compare",
-            demo: "https://yourname.github.io/tech-compare",
-        },
-    },
-
-    {
-        title: "Badboys | 배드민턴 라켓 아카이빙 사이트",
+        title: "Badboys",
         type: "personal",
-        period: "2025.01",
-        summary: "임베딩 기반 유사도 검색을 구현한 Node.js CLI 프로젝트",
+        period: "2025.11 ~ 2025.12",
+        summary: "배드민턴 라켓 아카이빙 사이트",
 
         role: [
-            "벡터 데이터 구조 설계",
-            "코사인 유사도 계산 로직 구현",
-            "CLI 명령어(add/search/delete) 설계",
+            "다양한 필터 기능",
+
         ],
 
         techStack: [
-            "Node.js",
+            "TypeScript",
             "JavaScript",
-            "Cosine Similarity",
-            "CLI",
+            "Next.js",
+            "React",
+            "supabase"
         ],
 
         troubles: [
+            //todo
             {
                 problem: "문장 길이에 따라 유사도 결과가 왜곡됨",
                 solution: "단어 벡터 평균 방식으로 문장 벡터 정규화",
@@ -159,7 +122,81 @@ export const projects: Project[] = [
         ],
 
         links: {
-            github: "https://github.com/yourname/vector-db-cli",
+            github: "https://github.com/seyoung34/BadBoys",
+            demo: "https://bad-boys-web.vercel.app/"
+        },
+    },
+
+    {
+        title: "Samchuck Smart Scuba",
+        type: "personal",
+        period: "2025.12 ~ 진행중",
+        summary: "스쿠버 다이빙 센터 홈페이지 제작",
+
+        role: [
+            "Three.js를 이용한 몰입감 제공",
+
+        ],
+
+        techStack: [
+            "TypeScript",
+            "JavaScript",
+            "Next.js",
+            "React",
+            "Three.js"
+        ],
+
+        troubles: [
+            //todo
+            {
+                problem: "모바일 환경에서 드래그시 하단 검은 영역 노출",
+                solution: "모바일 브라우저의 Overscroll (Bounce) 동작",
+                result: "overscroll-behavior, dvh 등 학습",
+            },
+        ],
+
+        links: {
+            github: "https://github.com/seyoung34/BadBoys",
+            demo: "https://bad-boys-web.vercel.app/"
+        },
+    },
+
+    {
+        title: "포트폴리오 웹사이트",
+        type: "personal",
+        period: "2026.01 ~ 진행중",
+        summary: "스냅 스크롤과 인터랙티브 디자인 포트폴리오",
+
+        role: [
+            "전체 UI/UX 기획 및 디자인",
+            "React + TypeScript 기반 구조 설계",
+            "스크롤 스냅 로직 구현(임계값, 쿨다운)",
+            "모바일/데스크톱 UX 분기 처리",
+        ],
+
+        techStack: [
+            "React",
+            "TypeScript",
+            "Next.js",
+            "Tailwindcss",
+        ],
+
+        troubles: [
+            {
+                problem: "모바일 환경에서 스크롤 스냅 UX가 오히려 불편함",
+                solution: "pointer: coarse 및 viewport 기준으로 스냅 로직 비활성화",
+                result: "모바일 사용자의 자연스러운 콘텐츠 소비 흐름 확보",
+            },
+            {
+                problem: "아코디언 높이를 render 중 ref로 측정하면서 ESLint 에러 발생",
+                solution: "useLayoutEffect에서 DOM 높이를 측정하고 state로 관리",
+                result: "React 규칙을 지키면서 부드러운 height 애니메이션 구현",
+            },
+        ],
+
+        links: {
+            github: "https://github.com/yourname/portfolio",
+            demo: "https://yourname.vercel.app",
         },
     },
 ];

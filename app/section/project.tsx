@@ -1,10 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { projects, type Project } from "./projectData"
-// import TroubleCarousel from "./TroubleCarousel";
-// import { Tag } from "../common/Tag";
-// import { UnderlineLink } from "../common/UnderlineLink";
+import { useEffect, useMemo, useState } from "react";
+import { projects, type Project } from "./projectData";
 
 type Props = {
     isMobile: boolean;
@@ -22,38 +19,78 @@ export default function ProjectSection({
     onCloseModal,
 }: Props) {
 
-    // ESC로 닫기
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    const total = projects.length;
+
+    const clampIndex = (n: number) => {
+        if (total === 0) return 0;
+        return (n + total) % total; // 무한 루프
+    };
+
+    const goPrev = () => setActiveIndex((v) => clampIndex(v - 1));
+    const goNext = () => setActiveIndex((v) => clampIndex(v + 1));
+
+
     useEffect(() => {
         if (!isModalOpen) return;
-
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") onCloseModal();
+
         };
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [isModalOpen, onCloseModal]);
 
+
+    useEffect(() => {
+        if (isModalOpen) return;
+
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "ArrowLeft") goPrev();
+            if (e.key === "ArrowRight") goNext();
+        };
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [isModalOpen, total]);
+
+
     return (
         <section
             className={[
-                "w-full",
+                "w-full h-screen",
                 isMobile ? "min-h-screen py-[84px]" : "h-screen flex items-center",
             ].join(" ")}
         >
-            <div className="mx-auto w-[min(1100px,92vw)]">
-                <h2 className="text-4xl font-extrabold text-text">
+            <div className="w-full h-full pt-8 flex flex-col">
+
+                <h2 className="text-4xl font-extrabold text-text w-[80%] mx-auto">
                     Projects
                 </h2>
 
-                <div className="mt-7 flex gap-4">
-                    {projects.map((p: Project) => (
-                        <ProjectCard
-                            key={p.title}
-                            project={p}
-                            onClick={() => onOpenModal(p)}
+
+                {isMobile ? (
+                    <div className="mt-7 flex flex-col gap-4">
+                        {projects.map((p) => (
+                            <ProjectCard
+                                key={p.title}
+                                project={p}
+                                onClick={() => onOpenModal(p)}
+                            />
+                        ))}
+                    </div>
+                )
+                    : (
+                        <DesktopCarousel
+                            projects={projects}
+                            activeIndex={activeIndex}
+                            onPrev={goPrev}
+                            onNext={goNext}
+                            onSelect={(idx) => setActiveIndex(idx)}
+                            onOpenModal={onOpenModal}
                         />
-                    ))}
-                </div>
+                    )}
             </div>
 
             {/* 모달 */}
@@ -65,12 +102,135 @@ export default function ProjectSection({
 }
 
 
+function DesktopCarousel({
+    projects,
+    activeIndex,
+    onPrev,
+    onNext,
+    onSelect,
+    onOpenModal,
+}: {
+    projects: Project[];
+    activeIndex: number;
+    onPrev: () => void;
+    onNext: () => void;
+    onSelect: (idx: number) => void;
+    onOpenModal: (p: Project) => void;
+}) {
+
+    // 카드 사이 간격
+    const STEP = 500;
+
+    return (
+        <div className="relative flex-1 mt-8 mx-auto w-[92vw] pb-0.5">
+
+            <div className="relative h-full w-full overflow-hidden  flex items-center justify-center">
+
+                <button
+                    type="button"
+                    onClick={onPrev}
+                    className="
+                        absolute left-0 top-1/2 z-30 -translate-y-1/2
+                        h-12 w-12 rounded-2xl
+                        border border-border bg-white/5 backdrop-blur
+                        text-text text-2xl hover:border-accent/40
+                    "
+                >
+                    {"<"}
+                </button>
+
+                <button
+                    type="button"
+                    onClick={onNext}
+                    className="
+                        absolute right-0 top-1/2 z-30 -translate-y-1/2
+                        h-12 w-12 rounded-2xl
+                        border border-border bg-white/5 backdrop-blur
+                        text-text text-2xl hover:border-accent/40
+                        focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60
+                    "
+                >
+                    {">"}
+                </button>
+
+                {/* 카드들*/}
+                {projects.map((p, i) => {
+
+                    const offset = i - activeIndex; // -2,-1,0,1,2...
+                    const abs = Math.abs(offset);
+
+                    const isActive = i === activeIndex;
+
+                    const activeCard = {
+                        opacity: 1,
+                        filter: `blur(0px)`,
+                        transform: `translateX(${offset * STEP}px) scale(1.4)`,
+                    }
+
+                    const inactiveCard = {
+                        opacity: 0.35,
+                        filter: `blur(1.5px)`,
+                        transform: `translateX(${offset * STEP}px) scale(0.7)`,
+                    }
+
+
+                    return (
+                        <div
+                            key={p.title}
+                            className={[
+                                "inline absolute",
+                                "transition-[transform,opacity,filter] duration-300 ease-out",
+                            ].join(" ")}
+
+                            style={isActive ? activeCard : inactiveCard}
+                        >
+
+                            <ProjectCard
+                                project={p}
+                                onClick={() => {
+                                    if (i !== activeIndex) onSelect(i);
+                                    else onOpenModal(p);
+                                }}
+
+                                className={abs === 0 ? "shadow-[0_22px_60px_rgba(0,0,0,0.55)]" : ""}
+                            />
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* 페이지 도트 */}
+            <div className="absolute bottom-5 left-1/2 z-30 -translate-x-1/2">
+                <div className="flex items-center gap-2">
+                    {projects.map((_, i) => {
+                        const on = i === activeIndex;
+                        return (
+                            <button
+                                key={i}
+                                type="button"
+                                aria-label={`프로젝트 ${i + 1}`}
+                                onClick={() => onSelect(i)}
+                                className={[
+                                    "h-2 rounded-full transition-all duration-200",
+                                    on ? "w-10 bg-accent" : "w-2 bg-border/70 hover:bg-border",
+                                ].join(" ")}
+                            />
+                        );
+                    })}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function ProjectCard({
     project,
     onClick,
+    className,
 }: {
     project: Project;
     onClick: () => void;
+    className?: string;
 }) {
     const typeLabel = project.type === "personal" ? "개인" : "팀";
 
@@ -79,64 +239,68 @@ function ProjectCard({
             type="button"
             onClick={onClick}
             className={[
-                "w-full text-left",
-                "relative z-1 overflow-hidden rounded-[18px]",
+                "w-[min(420px,78vw)] text-left",
+                "relative overflow-hidden rounded-[28px]",
                 "border border-border bg-surface",
+                "px-7 py-8",
                 "transition-[transform,box-shadow,border-color] duration-200 ease-out",
-                "hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(0,0,0,0.25)]",
-                "hover:border-[rgba(46,137,228,0.35)]",
-
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent",
-                "focus-visible:ring-offset-2 focus-visible:ring-offset-bg",
+                "hover:border-accent/40",
+                className ?? "",
             ].join(" ")}
         >
-            <div className="flex items-start justify-between gap-4 p-5">
-                {/* Left */}
-                <div className="flex flex-col gap-2">
-                    {/* TitleRow */}
-                    <div className="flex flex-wrap items-center gap-[10px]">
-                        <span className="h-[10px] w-[10px] rounded-full bg-[var(--color-accent)]" />
+            <div className="flex flex-col gap-5">
 
-                        <div className="text-[18px] font-black text-[var(--color-text)]">
-                            {project.title}
-                        </div>
 
-                        {/* TypePill */}
-                        <span
-                            className={[
-                                "ml-[6px] inline-flex items-center rounded-full px-[10px] py-[6px]",
-                                "text-[12px] font-extrabold",
-                                "border border-[var(--color-border)] bg-white/5 text-[var(--color-muted)]",
-                                project.type === "personal"
-                                    ? "border-[rgba(46,137,228,0.35)] text-[var(--color-text)]"
-                                    : "border-[rgba(245,247,255,0.10)]",
-                            ].join(" ")}
-                        >
-                            {typeLabel}
-                        </span>
-                    </div>
-
-                    {/* Meta */}
-                    <div className="text-[14px] leading-[1.6] text-[var(--color-muted)]">
-                        {project.period} · {project.summary}
-                    </div>
-
-                    {/* TagRow */}
-                    {/* <div className="mt-[2px] flex flex-wrap gap-2">
-                        {project.techStack.map((t) => (
-                            <Tag key={t}>{t}</Tag>
-                        ))}
-                    </div> */}
+                {/* 프로젝트 제목 */}
+                <div className="text-[34px] leading-[1.12] font-black text-text">
+                    {project.title}
                 </div>
 
-                {/* Right icon (아코디언의 화살표 느낌 유지) */}
-                <span className="mt-1 text-[var(--color-muted)] text-sm">더보기</span>
+                {/* 팀|개인 */}
+                <span
+                    className={[
+                        "inline-flex w-fit items-center rounded-full px-4 py-2 absolute right-4",
+                        "text-[12px] font-extrabold",
+                        "border border-border bg-white/5 text-muted",
+                        project.type === "personal" ? "border-accent/40 text-text" : "",
+                    ].join(" ")}
+                >
+                    {typeLabel}
+                </span>
+
+                {/* 설명 */}
+                <div className="text-muted leading-relaxed">
+                    {project.summary}
+                </div>
+
+                {/* 기간 */}
+                <div className="text-accent text-sm font-bold">{project.period}</div>
+
+                {/* 기술 스택 */}
+                <div className="w-full flex gap-2 outline outline-white ">
+                    {project.techStack.map((t) => {
+                        return (
+                            <span
+                                key={t}
+                                className={[
+                                    "w-fit items-center rounded-full px-4 py-2",
+                                    "text-[10px]",
+                                    "border border-border bg-white/5 text-muted",
+                                ].join(" ")}
+                            >
+                                {t}
+                            </span>
+                        )
+                    })}
+                </div>
+
+
             </div>
         </button>
     );
 }
 
-
+/* ProjectModal은 너의 기존 코드 그대로 유지 */
 function ProjectModal({
     project,
     onClose,
@@ -153,36 +317,28 @@ function ProjectModal({
             aria-modal="true"
             aria-label="프로젝트 상세"
         >
-            {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/55 backdrop-blur-sm"
                 onClick={onClose}
             />
-
-            {/* Modal Card */}
             <div
                 className={[
                     "relative z-10",
                     "w-[min(920px,92vw)]",
                     "max-h-[min(82vh,760px)] overflow-auto",
-                    "rounded-[18px] border border-[var(--color-border)] bg-[var(--color-surface)]",
+                    "rounded-[18px] border border-border bg-surface",
                     "shadow-[0_18px_52px_rgba(0,0,0,0.45)]",
                 ].join(" ")}
             >
-                {/* Header */}
-                <div className="flex items-start justify-between gap-3 border-b border-[var(--color-border)] p-4">
+                <div className="flex items-start justify-between gap-3 border-b border-border p-4">
                     <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-[20px] font-black text-[var(--color-text)]">
-                            {project.title}
-                        </h3>
+                        <h3 className="text-[20px] font-black text-text">{project.title}</h3>
                         <span
                             className={[
                                 "inline-flex items-center rounded-full px-[10px] py-[6px]",
                                 "text-[12px] font-extrabold",
-                                "border border-[var(--color-border)] bg-white/5 text-[var(--color-muted)]",
-                                project.type === "personal"
-                                    ? "border-[rgba(46,137,228,0.35)] text-[var(--color-text)]"
-                                    : "border-[rgba(245,247,255,0.10)]",
+                                "border border-border bg-white/5 text-muted",
+                                project.type === "personal" ? "border-accent/40 text-text" : "",
                             ].join(" ")}
                         >
                             {typeLabel}
@@ -192,41 +348,30 @@ function ProjectModal({
                     <button
                         type="button"
                         onClick={onClose}
-                        className={[
-                            "rounded-full border border-[var(--color-border)] bg-white/5",
-                            "px-3 py-2 text-[12px] font-extrabold text-[var(--color-muted)]",
-                            "hover:text-[var(--color-text)] hover:border-[rgba(46,137,228,0.35)]",
-                            "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]",
-                            "focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)]",
-                        ].join(" ")}
+                        className="
+                            rounded-full border border-border bg-white/5
+                            px-3 py-2 text-[12px] font-extrabold text-muted
+                            hover:text-text hover:border-accent/40
+                            focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60
+                            focus-visible:ring-offset-2 focus-visible:ring-offset-bg
+                            "
                         aria-label="모달 닫기"
                     >
                         ✕
                     </button>
                 </div>
 
-                {/* Meta */}
-                <div className="px-4 pt-4 text-[14px] leading-[1.6] text-[var(--color-muted)]">
+                <div className="px-4 pt-4 text-[14px] leading-[1.6] text-muted">
                     {project.period} · {project.summary}
                 </div>
 
-                {/* TagRow */}
-                {/* <div className="px-4 pt-3 flex flex-wrap gap-2">
-                    {project.techStack.map((t) => (
-                        <Tag key={t}>{t}</Tag>
-                    ))}
-                </div> */}
-
-                {/* Body (아코디언 본문 이동) */}
                 <div className="p-4">
                     <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-[1fr,1.2fr]">
                         <div>
-                            <div className="text-[13px] font-black text-[var(--color-text)]">
-                                역할
-                            </div>
+                            <div className="text-[13px] font-black text-text">역할</div>
                             <ul className="mt-3 list-disc pl-5 leading-[1.7]">
                                 {project.role.map((r) => (
-                                    <li key={r} className="text-[var(--color-muted)]">
+                                    <li key={r} className="text-muted">
                                         {r}
                                     </li>
                                 ))}
@@ -234,43 +379,18 @@ function ProjectModal({
                         </div>
 
                         <div>
-                            <div className="text-[13px] font-black text-[var(--color-text)]">
-                                트러블슈팅
-                            </div>
+                            <div className="text-[13px] font-black text-text">트러블슈팅</div>
                             {project.troubles.length === 0 ? (
-                                <div className="mt-3 text-[14px] text-[var(--color-muted)]">
-                                    추가 예정
-                                </div>
+                                <div className="mt-3 text-[14px] text-muted">추가 예정</div>
                             ) : (
-                                <div className="mt-3">
-                                    {/* <TroubleCarousel troubles={project.troubles} /> */}
-                                    트러블캐러셀
-                                </div>
+                                <div className="mt-3 text-muted">트러블캐러셀</div>
                             )}
                         </div>
                     </div>
 
-                    <div className="mt-5 flex gap-5 border-t border-[var(--color-border)] pt-4">
-                        {project.links.github && (
-                            // <UnderlineLink
-                            //     href={project.links.github}
-                            //     target="_blank"
-                            //     rel="noreferrer"
-                            // >
-                            //     GitHub
-                            // </UnderlineLink>
-                            <div>Github</div>
-                        )}
-                        {project.links.demo && (
-                            // <UnderlineLink
-                            //     href={project.links.demo}
-                            //     target="_blank"
-                            //     rel="noreferrer"
-                            // >
-                            //     Demo
-                            // </UnderlineLink>
-                            <div>Demo</div>
-                        )}
+                    <div className="mt-5 flex gap-5 border-t border-border pt-4">
+                        {project.links.github && <div className="text-muted">Github</div>}
+                        {project.links.demo && <div className="text-muted">Demo</div>}
                     </div>
                 </div>
             </div>

@@ -152,7 +152,7 @@ function SkillCard({ skill, className }: Props) {
     );
 }
 
-export default function SkillsGrid({ isMobile }: { isMobile: boolean }) {
+export default function Skills({ isMobile }: { isMobile: boolean }) {
     const sectionRef = useRef<HTMLElement>(null);
     const inView = useInView(sectionRef, { threshold: isMobile ? 0.25 : 0.5 });
 

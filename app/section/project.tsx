@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { projects, type Project } from "./projectData";
+import { projects, Trouble, type Project } from "./projectData";
+import TroubleCarousel from "./TroubleCarousel";
 
 type Props = {
     isMobile: boolean;
@@ -259,7 +260,7 @@ function ProjectCard({
                 {/* 팀|개인 */}
                 <span
                     className={[
-                        "inline-flex w-fit items-center rounded-full px-4 py-2 absolute right-4",
+                        "inline-flex w-fit items-center rounded-full px-2 py-2 absolute right-4",
                         "text-[12px] font-extrabold",
                         "border border-border bg-white/5 text-muted",
                         project.type === "personal" ? "border-accent/40 text-text" : "",
@@ -277,13 +278,13 @@ function ProjectCard({
                 <div className="text-accent text-sm font-bold">{project.period}</div>
 
                 {/* 기술 스택 */}
-                <div className="w-full flex gap-2 outline outline-white ">
+                <div className="w-full flex gap-2 flex-wrap">
                     {project.techStack.map((t) => {
                         return (
                             <span
                                 key={t}
                                 className={[
-                                    "w-fit items-center rounded-full px-4 py-2",
+                                    "items-center rounded-4xl px-4 py-2",
                                     "text-[10px]",
                                     "border border-border bg-white/5 text-muted",
                                 ].join(" ")}
@@ -300,7 +301,7 @@ function ProjectCard({
     );
 }
 
-/* ProjectModal은 너의 기존 코드 그대로 유지 */
+
 function ProjectModal({
     project,
     onClose,
@@ -313,9 +314,6 @@ function ProjectModal({
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            role="dialog"
-            aria-modal="true"
-            aria-label="프로젝트 상세"
         >
             <div
                 className="absolute inset-0 bg-black/55 backdrop-blur-sm"
@@ -324,24 +322,28 @@ function ProjectModal({
             <div
                 className={[
                     "relative z-10",
-                    "w-[min(920px,92vw)]",
-                    "max-h-[min(82vh,760px)] overflow-auto",
+                    "w-[min(1080px,92vw)]",
+                    "max-h-[min(90vh,960px)] overflow-auto p-2",
                     "rounded-[18px] border border-border bg-surface",
                     "shadow-[0_18px_52px_rgba(0,0,0,0.45)]",
+                    "modal-scrollbar"
                 ].join(" ")}
             >
-                <div className="flex items-start justify-between gap-3 border-b border-border p-4">
+                <div className="flex items-center justify-between gap-3 border-b border-border p-4">
                     <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-[20px] font-black text-text">{project.title}</h3>
+                        <h3 className="text-3xl font-black text-text">{project.title}</h3>
                         <span
                             className={[
-                                "inline-flex items-center rounded-full px-[10px] py-[6px]",
+                                "inline-flex items-center rounded-full mx-1 px-2 py-[6px]",
                                 "text-[12px] font-extrabold",
                                 "border border-border bg-white/5 text-muted",
                                 project.type === "personal" ? "border-accent/40 text-text" : "",
                             ].join(" ")}
                         >
                             {typeLabel}
+                        </span>
+                        <span className="px-4 text-[14px] leading-[1.6] text-muted">
+                            {project.period}
                         </span>
                     </div>
 
@@ -355,20 +357,20 @@ function ProjectModal({
                             focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60
                             focus-visible:ring-offset-2 focus-visible:ring-offset-bg
                             "
-                        aria-label="모달 닫기"
                     >
                         ✕
                     </button>
                 </div>
 
-                <div className="px-4 pt-4 text-[14px] leading-[1.6] text-muted">
-                    {project.period} · {project.summary}
+                <div className="px-4 pt-4 text-xl leading-[1.6] text-muted">
+                    {project.summary}
                 </div>
+
 
                 <div className="p-4">
                     <div className="mt-2 grid grid-cols-1 gap-4 md:grid-cols-[1fr,1.2fr]">
                         <div>
-                            <div className="text-[13px] font-black text-text">역할</div>
+                            <div className="text-xl font-black text-text">{`${project.type == "team" ? "역할" : "기능"}`}</div>
                             <ul className="mt-3 list-disc pl-5 leading-[1.7]">
                                 {project.role.map((r) => (
                                     <li key={r} className="text-muted">
@@ -379,18 +381,18 @@ function ProjectModal({
                         </div>
 
                         <div>
-                            <div className="text-[13px] font-black text-text">트러블슈팅</div>
                             {project.troubles.length === 0 ? (
                                 <div className="mt-3 text-[14px] text-muted">추가 예정</div>
                             ) : (
-                                <div className="mt-3 text-muted">트러블캐러셀</div>
+                                <TroubleCarousel troubles={project.troubles} />
                             )}
+
                         </div>
                     </div>
 
                     <div className="mt-5 flex gap-5 border-t border-border pt-4">
-                        {project.links.github && <div className="text-muted">Github</div>}
-                        {project.links.demo && <div className="text-muted">Demo</div>}
+                        {project.links.github && <a className="text-muted cursor-pointer hover:text-accent" href={project.links.github}>Github</a>}
+                        {project.links.demo && <a className="text-muted cursor-pointer hover:text-accent" href={project.links.demo}>Demo</a>}
                     </div>
                 </div>
             </div>

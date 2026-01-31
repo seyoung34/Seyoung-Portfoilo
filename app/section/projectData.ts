@@ -113,7 +113,7 @@ export const projects: Project[] = [
         title: "Badboys",
         type: "personal",
         period: "2025.11 ~ 2025.12",
-        summary: "배드민턴 라켓 아카이빙,  사이트",
+        summary: "배드민턴 라켓 아카이빙, 검색 사이트",
 
         role: [
             "필터링, 키워드 검색 기능",

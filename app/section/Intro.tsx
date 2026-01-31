@@ -42,53 +42,84 @@ export default function Intro({ isMobile }: { isMobile: boolean }) {
 
 function ProfileButton() {
     return (
-        <div className="inline-flex items-center gap-3 rounded-full border border-border px-3 py-2">
-            <UnderlineLink href="www.naver.com" name="GitHub" />
+        <div className="
+            inline-flex items-center gap-3
+            rounded-full border border-border
+            px-4 py-3
+            bg-white/5
+        ">
+            <ContactLink
+                label="GitHub"
+                href="https://github.com/seyoung34"
+                external
+            />
 
-            <span className="h-4 w-px bg-border" />
+            <Divider />
 
-            <UnderlineLink href="www.naver.com" name="Email" />
+            <ContactLink
+                label="Email"
+                href="mailto:jupi0304@naver.com"
+                copyText="jupi0304@naver.com"
+            />
 
-            <span className="h-4 w-px bg-border" />
+            <Divider />
 
-            <UnderlineLink href="www.naver.com" name="Phone" />
+            <ContactLink
+                label="Phone"
+                href="tel:01033724784"
+                copyText="010-3372-4784"
+            />
         </div>
     );
 }
 
+function Divider() {
+    return <span className="h-4 w-px bg-border" />;
+}
 
-function UnderlineLink({ href, name }: { href: string, name: string }) {
+
+
+function ContactLink({
+    label,
+    href,
+    copyText,
+    external,
+}: {
+    label: string;
+    href: string;
+    copyText?: string;
+    external?: boolean;
+}) {
+    const handleClick = () => {
+        if (copyText && !isMobileDevice()) {
+            navigator.clipboard.writeText(copyText);
+
+        }
+    };
+
     return (
         <a
             href={href}
+            onClick={handleClick}
+            target={external ? "_blank" : undefined}
+            rel={external ? "noreferrer" : undefined}
             className="
-        relative inline-block
-        font-medium
-        text-text
-        hover:text-accent
-        after:absolute
-        after:left-0
-        after:-bottom-[2px]
-        after:h-[1px]
-        after:w-full
-        after:origin-center
-        after:scale-x-0
-        after:bg-accent
-        after:transition-transform
-        after:duration-300
-        after:ease-out
-        hover:after:scale-x-100
-      "
+                relative inline-flex items-center gap-1
+                px-1 font-medium
+                text-text hover:text-accent
+                after:absolute after:left-0 after:-bottom-[2px]
+                after:h-[1px] after:w-full
+                after:origin-left after:scale-x-0
+                after:bg-accent
+                after:transition-transform after:duration-300
+                hover:after:scale-x-100
+            "
         >
-            {name}
+            {label}
         </a>
     );
 }
 
-
-function SweepLine() {
-    return (
-        <div className="absolute h-[2px] w-full bg-accent animate-sweep" />
-
-    )
+function isMobileDevice() {
+    return window.matchMedia("(pointer: coarse)").matches;
 }

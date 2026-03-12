@@ -160,82 +160,6 @@ export const projects: Project[] = [
     },
 
     {
-        title: "Samchuck Smart Scuba",
-        type: "personal",
-        period: "2025.12 ~ 진행중",
-        summary: "스쿠버 다이빙 센터 홈페이지 제작",
-
-        role: [
-            "Three.js를 이용하여 스크롤 기반 다이빙 경험 UX",
-            "스프라이트 이미지를 이용한 애니메이션",
-        ],
-
-        techStack: [
-            "TypeScript",
-            "Next.js",
-            "React",
-            "Three.js"
-        ],
-
-        troubles: [
-
-            {
-                problem: "모바일 환경에서 드래그시 하단 검은 영역 노출",
-                cause: "overscroll-behavior, dvh 등 학습",
-                solution: "모바일 브라우저의 Overscroll (Bounce) 동작",
-            },
-            {
-                problem: "three.js 요소들이 움직일 때 튐 발생",
-                cause: "목표값을 바로 적용하면 시각적으로 부자연스러움",
-                solution: "S커브 보간 유틸 함수 적용",
-            },
-        ],
-
-        links: {
-            github: "https://github.com/seyoung34/SamcheokSmartScuba",
-            demo: "https://samcheok-smart-scuba.vercel.app/"
-        },
-    },
-
-    {
-        title: "포트폴리오 웹사이트",
-        type: "personal",
-        period: "2026.01 ~ 진행중",
-        summary: "스냅 스크롤과 인터랙티브 디자인 포트폴리오",
-
-        role: [
-            "전체 UI/UX 기획 및 디자인",
-            "스크롤 스냅 로직 구현",
-            "모바일/데스크톱 UX 분기 처리",
-        ],
-
-        techStack: [
-            "React",
-            "TypeScript",
-            "Next.js",
-            "TailwindCss",
-        ],
-
-        troubles: [
-            {
-                problem: "모달의 상태를 Project에서 Home으로 올려야함",
-                cause: "Dispatch + SetStateAction 방법을 고민",
-                solution: "상태 관리의 책임을 한 곳에서 관리하기 위해 일반 함수 방식으로 Home에서 관리",
-            },
-            {
-                problem: "화면에 보일 때 마다 애니메이션이 작동하기를 원함",
-                cause: "IntersectionObserver에 대한 학습",
-                solution: "useInView 커스텀 훅 ",
-            },
-        ],
-
-        links: {
-            github: "https://github.com/seyoung34/Seyoung-Portfoilo",
-            demo: "https://seyoung-portfoilo.vercel.app/",
-        },
-    },
-
-    {
         title: "Vision Interaction Studio",
         type: "personal",
         period: "2026.02 ~ 진행중",
@@ -280,4 +204,83 @@ export const projects: Project[] = [
             demo: "https://vision-interaction-studio.vercel.app"
         },
     },
+
+    {
+        title: "Samchuck Smart Scuba",
+        type: "personal",
+        period: "2025.12 ~ 진행중",
+        summary: "스쿠버 다이빙 센터 홈페이지 제작",
+
+        role: [
+            "Three.js를 이용하여 스크롤 기반 다이빙 경험 UX",
+            "스프라이트 이미지를 이용한 애니메이션",
+        ],
+
+        techStack: [
+            "TypeScript",
+            "Next.js",
+            "React",
+            "Three.js"
+        ],
+
+        troubles: [
+
+            {
+                problem: "모바일 환경에서 드래그시 하단 검은 영역 노출",
+                cause: "overscroll-behavior, dvh 등 학습",
+                solution: "모바일 브라우저의 Overscroll (Bounce) 동작",
+            },
+            {
+                problem: "three.js 요소들이 움직일 때 튐 발생",
+                cause: "목표값을 바로 적용하면 시각적으로 부자연스러움",
+                solution: "S커브 보간 유틸 함수 적용",
+            },
+        ],
+
+        links: {
+            github: "https://github.com/seyoung34/SamcheokSmartScuba",
+            demo: "https://samcheok-smart-scuba.vercel.app/"
+        },
+    },
+
+    //포트폴리오 웹사이트 
+    // {
+    //     title: "포트폴리오 웹사이트",
+    //     type: "personal",
+    //     period: "2026.01 ~ 진행중",
+    //     summary: "스냅 스크롤과 인터랙티브 디자인 포트폴리오",
+
+    //     role: [
+    //         "전체 UI/UX 기획 및 디자인",
+    //         "스크롤 스냅 로직 구현",
+    //         "모바일/데스크톱 UX 분기 처리",
+    //     ],
+
+    //     techStack: [
+    //         "React",
+    //         "TypeScript",
+    //         "Next.js",
+    //         "TailwindCss",
+    //     ],
+
+    //     troubles: [
+    //         {
+    //             problem: "모달의 상태를 Project에서 Home으로 올려야함",
+    //             cause: "Dispatch + SetStateAction 방법을 고민",
+    //             solution: "상태 관리의 책임을 한 곳에서 관리하기 위해 일반 함수 방식으로 Home에서 관리",
+    //         },
+    //         {
+    //             problem: "화면에 보일 때 마다 애니메이션이 작동하기를 원함",
+    //             cause: "IntersectionObserver에 대한 학습",
+    //             solution: "useInView 커스텀 훅 ",
+    //         },
+    //     ],
+
+    //     links: {
+    //         github: "https://github.com/seyoung34/Seyoung-Portfoilo",
+    //         demo: "https://seyoung-portfoilo.vercel.app/",
+    //     },
+    // },
+
+
 ];

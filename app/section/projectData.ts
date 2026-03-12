@@ -234,4 +234,50 @@ export const projects: Project[] = [
             demo: "https://seyoung-portfoilo.vercel.app/",
         },
     },
+
+    {
+        title: "Vision Interaction Studio",
+        type: "personal",
+        period: "2026.02 ~ 진행중",
+        summary: "MediaPipe 기반 실시간 손 제스처 인식과 캔버스 이펙트를 결합한 인터랙티브 비전 웹 프로젝트",
+
+        role: [
+            "Gesture Rule + State Machine 구조로 제스처 인식 로직 개발",
+            "화면 효과 엔진 구현 및 제스처 매핑 시스템 구축",
+            "커스텀 외부 Store(configStore/stateStore)와 useSyncExternalStore로 실시간 상태 흐름 설계",
+            "Control Panel 중심의 실시간 파라미터 튜닝 UI 및 상태 디버그 패널 구성",
+        ],
+
+        techStack: [
+            "TypeScript",
+            "Next.js",
+            "React",
+            "MediaPipe Tasks Vision",
+            "Canvas API",
+            "Tailwind CSS",
+        ],
+
+        troubles: [
+            {
+                problem: "UI 계층이 깊어지면서 설정값과 디버그 상태를 props로 전달하는 구조가 복잡해지고 유지보수가 어려워짐",
+                cause: "Control Panel, 세션 컴포넌트, 상태 패널이 서로 다른 관심사를 가지는데도 공통 상태를 상위에서만 관리해 props drilling이 반복됨",
+                solution: "redux/zustand 도입 대신 요구사항에 맞는 경량 외부 store(configStore/stateStore)를 직접 설계하고 useSyncExternalStore로 구독 구조를 적용해 상태 전달 경로를 단순화",
+            },
+            {
+                problem: "프레임마다 상태를 즉시 반영하면 React 리렌더가 과도하게 발생해 UI가 불안정해짐",
+                cause: "실시간 비전 파이프라인은 고주기(raf) 업데이트가 발생하는데, 상태 반영 주기를 제어하지 않으면 렌더 비용이 누적됨",
+                solution: "stateStore에 dirty 플래그와 flushInterval 기반 throttle을 적용해 프레임 처리와 UI 반영 주기를 분리하고 안정적으로 디버깅 상태를 표시",
+            },
+            {
+                problem: "제스처와 이펙트가 1:1로 고정되면 기능 확장 시 코드 변경 범위가 커짐",
+                cause: "인식 로직과 렌더링 로직이 직접 결합된 구조에서는 새 제스처/이펙트 추가 시 파이프라인 결합도가 급격히 증가",
+                solution: "gestureToEffect 매핑 설정과 effectEngine 레이어를 분리해 제스처 판정과 시각 효과를 독립적으로 확장 가능한 구조로 리팩토링",
+            },
+        ],
+
+        links: {
+            github: "https://github.com/seyoung34/vision-interaction-studio",
+            demo: "https://vision-interaction-studio.vercel.app"
+        },
+    },
 ];
